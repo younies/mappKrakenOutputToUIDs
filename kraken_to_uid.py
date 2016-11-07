@@ -27,7 +27,7 @@ mapper = {
 
 kraken_output_path 	= ""
 names_path 		 	= ""
-
+write_file 			= ""
 kraken = open(kraken_output_path)
 names = open(names_path)
 
@@ -57,7 +57,7 @@ def getUIDs(kraken_line, names ):
 	(header , output) = kraken_line.split('\t')
 	input_uid = getUIDFromHiSeq(header)
 	output_uid = getUIDfromTailHiSeq(output , names)
-	return (input_uid , output_uid)
+	return [input_uid , output_uid]
 
 
 
@@ -66,9 +66,17 @@ def getUIDs(kraken_line, names ):
 kraken_lines = kraken.read()
 kraken_lines = kraken_lines.split("\n")
 
-for i in range(len(kraken_lines)):
-	kraken_lines[i] = kraken_lines[i].strip()
-	kraken_lines
+
+names_lines = names.read()
+names_lines = names_lines.split("\n")
+
+
+write_file = open(write_file , 'w')
+
+for kra in kraken_lines:
+	write_file.write("\t".join(getUIDs(kra , names_lines )))
+	write_file.write('\n')
+write_file.close()
 
 
 
